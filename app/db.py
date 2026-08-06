@@ -45,8 +45,11 @@ async def _init_schema() -> None:
                 created_at TIMESTAMPTZ DEFAULT NOW()
             )
         ''')
+        # HNSW: builds incrementally (no pre-existing data needed, unlike ivfflat).
+        # m=16: connections per node per layer. ef_construction=64: search depth during build.
+        # Higher m/ef = better recall, more RAM. Defaults are solid for learning-scale data.
         await conn.execute('''
             CREATE INDEX IF NOT EXISTS documents_embedding_idx
-            ON documents USING ivfflat (embedding vector_cosine_ops)
-            WITH (lists = 100)
+            ON documents USING hnsw (embedding vector_cosine_ops)
+            WITH (m = 16, ef_construction = 64)
         ''')
