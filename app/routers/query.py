@@ -1,13 +1,10 @@
 from fastapi import APIRouter, HTTPException
-import anthropic
 from app.models import QueryRequest, QueryResponse, ChunkMatch
 from app.embed import embed
 from app.db import get_pool
-from app.config import settings
+from app.llm import client
 
 router = APIRouter()
-
-_client = anthropic.AsyncAnthropic(api_key=settings.anthropic_api_key)
 
 
 @router.post('/query', response_model=QueryResponse)
@@ -36,7 +33,7 @@ async def query(body: QueryRequest) -> QueryResponse:
     context = '\n\n'.join(row['content'] for row in rows)
     sources = [ChunkMatch(content=row['content'], similarity=round(row['similarity'], 4)) for row in rows]
 
-    message = await _client.messages.create(
+    message = await client.messages.create(
         model='claude-haiku-4-5-20251001',
         max_tokens=1024,
         messages=[

@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     embed_model: str = 'nomic-embed-text'
     embed_dim: int = 768
     top_k: int = 5
+    cors_origins: list[str] = ['http://localhost:3000', 'http://localhost:5173']
 
     class Config:
         env_file = '.env'

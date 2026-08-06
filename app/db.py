@@ -42,6 +42,8 @@ async def _init_schema() -> None:
                 id SERIAL PRIMARY KEY,
                 content TEXT NOT NULL,
                 embedding vector(768) NOT NULL,
+                -- Generated column: PostgreSQL keeps this in sync automatically on every INSERT/UPDATE.
+                content_tsv tsvector GENERATED ALWAYS AS (to_tsvector('english', content)) STORED,
                 created_at TIMESTAMPTZ DEFAULT NOW()
             )
         ''')
@@ -52,4 +54,9 @@ async def _init_schema() -> None:
             CREATE INDEX IF NOT EXISTS documents_embedding_idx
             ON documents USING hnsw (embedding vector_cosine_ops)
             WITH (m = 16, ef_construction = 64)
+        ''')
+        # GIN index for fast full-text search on the tsvector column.
+        await conn.execute('''
+            CREATE INDEX IF NOT EXISTS documents_tsv_idx
+            ON documents USING gin (content_tsv)
         ''')
