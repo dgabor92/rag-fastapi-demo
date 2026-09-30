@@ -21,6 +21,8 @@ services:
       DATABASE_URL: postgresql://rag:rag@db:5432/rag
       OLLAMA_URL: http://host.docker.internal:11434
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+    ports:
+      - '8000:8000'
     depends_on:
       db:
         condition: service_healthy

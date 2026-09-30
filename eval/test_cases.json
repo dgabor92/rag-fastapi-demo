@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "question": "What is RAG and how does it reduce hallucination?"
+  },
+  {
+    "id": 2,
+    "question": "How does a vector database store and search text semantically?"
+  },
+  {
+    "id": 3,
+    "question": "What is hybrid search and how does the RRF algorithm work?"
+  },
+  {
+    "id": 4,
+    "question": "Why does chunk size matter and what is the purpose of chunk overlap?"
+  },
+  {
+    "id": 5,
+    "question": "What is the capital of France?"
+  }
+]
