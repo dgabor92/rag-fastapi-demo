@@ -251,6 +251,12 @@ rag-fastapi-demo/
 │       ├── ingest.py
 │       ├── query.py
 │       └── hybrid_query.py
+├── eval/
+│   ├── eval.py             # Custom LLM-as-a-judge pipeline (Phase 5)
+│   ├── ragas_eval.py       # RAGAS framework evaluation (Phase 5)
+│   ├── test_cases.json     # 5 test questions + ground truth answers
+│   ├── test_corpus.txt     # Knowledge base used for evaluation
+│   └── requirements-eval.txt  # Eval-only dependencies (ragas, langchain, etc.)
 ├── frontend/
 │   └── src/
 │       └── App.tsx        # React UI (3 tabs: Ingest, Semantic, Hybrid)
@@ -261,6 +267,45 @@ rag-fastapi-demo/
 ├── requirements.txt
 └── .env.example
 ```
+
+---
+
+## Evaluation (Phase 5)
+
+The `eval/` directory contains two parallel evaluation pipelines that measure RAG quality using **LLM-as-a-judge** — a lightweight Claude Haiku model scores each response without needing human-labelled datasets.
+
+### Metrics
+
+| Metric | Description | Needs |
+|---|---|---|
+| **Faithfulness** | Does every claim in the answer appear in the retrieved context? (0 = hallucination, 1 = fully grounded) | LLM |
+| **Context Precision** | Are the retrieved chunks actually useful for the question? (0 = all noise, 1 = all relevant) | LLM |
+| **Answer Relevancy** | Does the answer directly address the question? | LLM + embeddings |
+
+### Option A — Custom pipeline (`eval.py`)
+
+Implements the three judges from scratch. Useful for understanding exactly what happens at each step.
+
+```bash
+# Requires docker compose up -d and ollama serve
+.venv/bin/python eval/eval.py
+# Results saved to eval/results.json
+```
+
+### Option B — RAGAS framework (`ragas_eval.py`)
+
+Uses the [RAGAS](https://docs.ragas.io) evaluation library with Claude Haiku as the LLM judge. Runs faithfulness and context_precision (answer_relevancy requires scipy which has a binary incompatibility on macOS Darwin 27+).
+
+```bash
+# Install eval dependencies first (one-time)
+pip install -r eval/requirements-eval.txt
+
+# Requires docker compose up -d and ollama serve
+.venv/bin/python eval/ragas_eval.py
+# Results saved to eval/ragas_results.json
+```
+
+**Note:** The API must be reachable at `http://localhost:8000` — `docker-compose.yml` exposes port 8000 on the host for this purpose.
 
 ---
 

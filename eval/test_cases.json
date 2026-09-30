@@ -1,22 +1,27 @@
 [
   {
     "id": 1,
-    "question": "What is RAG and how does it reduce hallucination?"
+    "question": "What is RAG and how does it reduce hallucination?",
+    "ground_truth": "RAG retrieves relevant documents from a knowledge base and uses them as context for generating answers, constraining the model to retrieved information rather than fabricating facts from memory."
   },
   {
     "id": 2,
-    "question": "How does a vector database store and search text semantically?"
+    "question": "How does a vector database store and search text semantically?",
+    "ground_truth": "A vector database stores text as high-dimensional numerical embeddings and uses cosine similarity to find semantically similar texts. Similar texts produce embeddings that are mathematically close together in vector space."
   },
   {
     "id": 3,
-    "question": "What is hybrid search and how does the RRF algorithm work?"
+    "question": "What is hybrid search and how does the RRF algorithm work?",
+    "ground_truth": "Hybrid search combines semantic vector search with traditional full-text keyword search. RRF merges ranked lists by scoring each document as 1 divided by (k plus its rank), so documents ranking highly in both lists receive a higher combined score."
   },
   {
     "id": 4,
-    "question": "Why does chunk size matter and what is the purpose of chunk overlap?"
+    "question": "Why does chunk size matter and what is the purpose of chunk overlap?",
+    "ground_truth": "Smaller chunks improve retrieval precision but may lose surrounding context, while larger chunks preserve context but introduce noise. Chunk overlap (typically 50 words) prevents important information from being split across chunk boundaries."
   },
   {
     "id": 5,
-    "question": "What is the capital of France?"
+    "question": "What is the capital of France?",
+    "ground_truth": "Paris is the capital of France."
   }
 ]
